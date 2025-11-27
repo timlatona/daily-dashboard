@@ -182,19 +182,48 @@ async function fetchHistoryData() {
 // --- Tide Data Integration ---
 async function fetchTideData() {
     const tideContainer = document.getElementById('tide-data');
-    const apiUrl = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=today&station=${CONFIG.tideStationId}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&interval=hilo&application=DailyDashboard&format=json`;
+
+    // Fetch today's tides
+    const todayUrl = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?date=today&station=${CONFIG.tideStationId}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&interval=hilo&application=DailyDashboard&format=json`;
+
+    // Fetch 14 days of tides for lowest daylight tide
+    const today = new Date();
+    const endDate = new Date(today);
+    endDate.setDate(endDate.getDate() + 14);
+
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}${month}${day}`;
+    };
+
+    const rangeUrl = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=${formatDate(today)}&end_date=${formatDate(endDate)}&station=${CONFIG.tideStationId}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=english&interval=hilo&application=DailyDashboard&format=json`;
 
     try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error('Network response was not ok');
+        // Fetch both today's tides and 14-day range
+        const [todayResponse, rangeResponse] = await Promise.all([
+            fetch(todayUrl),
+            fetch(rangeUrl)
+        ]);
 
-        const data = await response.json();
+        if (!todayResponse.ok || !rangeResponse.ok) throw new Error('Network response was not ok');
 
-        if (data.predictions && data.predictions.length > 0) {
-            renderTides(data.predictions);
+        const todayData = await todayResponse.json();
+        const rangeData = await rangeResponse.json();
+
+        // Render today's low tides
+        if (todayData.predictions && todayData.predictions.length > 0) {
+            renderTides(todayData.predictions);
         } else {
             tideContainer.innerHTML = '<p>No tide data available for today.</p>';
         }
+
+        // Find lowest daylight tide in next 14 days
+        if (rangeData.predictions && rangeData.predictions.length > 0) {
+            findLowestDaylightTide(rangeData.predictions);
+        }
+
     } catch (error) {
         console.error('Error fetching tide data:', error);
         tideContainer.innerHTML = '<p>Unable to load tide data.</p>';
@@ -224,6 +253,61 @@ function renderTides(predictions) {
         `;
         tideContainer.appendChild(tideItem);
     });
+}
+
+async function findLowestDaylightTide(predictions) {
+    const lowestContainer = document.getElementById('lowest-tide-data');
+    if (!lowestContainer) return;
+
+    // We need sunrise/sunset times to determine daylight
+    // We'll use the already-fetched sunriseTime and sunsetTime, or wait for them
+    // For simplicity, let's assume sunrise is around 7:30 AM and sunset around 4:30 PM
+    // In a more robust solution, we'd fetch sunrise/sunset for each day
+
+    const lowTides = predictions.filter(p => p.type === 'L');
+
+    let lowestDaylightTide = null;
+
+    for (const tide of lowTides) {
+        const tideDate = new Date(tide.t);
+        const hour = tideDate.getHours();
+
+        // Consider daylight as roughly 7 AM to 5 PM (conservative estimate)
+        const isDaylight = hour >= 7 && hour < 17;
+
+        if (isDaylight) {
+            const level = parseFloat(tide.v);
+            if (!lowestDaylightTide || level < lowestDaylightTide.level) {
+                lowestDaylightTide = {
+                    date: tideDate,
+                    level: level,
+                    time: tide.t
+                };
+            }
+        }
+    }
+
+    if (lowestDaylightTide) {
+        const dateStr = lowestDaylightTide.date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric'
+        });
+        const timeStr = formatTime(lowestDaylightTide.time);
+
+        lowestContainer.innerHTML = `
+            <div class="lowest-tide-highlight">
+                <div class="lowest-tide-label">Lowest Daylight Tide (14 days)</div>
+                <div class="lowest-tide-info">
+                    <span class="lowest-tide-date">${dateStr}</span>
+                    <span class="lowest-tide-time">${timeStr}</span>
+                    <span class="lowest-tide-level">${lowestDaylightTide.level.toFixed(1)} ft</span>
+                </div>
+            </div>
+        `;
+    } else {
+        lowestContainer.innerHTML = '<p style="font-size: 0.9rem; opacity: 0.7;">No daylight low tides found.</p>';
+    }
 }
 
 function formatTime(dateString) {

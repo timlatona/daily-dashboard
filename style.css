@@ -350,6 +350,50 @@ h2 {
     color: var(--accent-1);
 }
 
+/* Lowest Tide Highlight */
+.lowest-tide-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lowest-tide-highlight {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.lowest-tide-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.lowest-tide-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.lowest-tide-date {
+    font-weight: 600;
+    color: var(--accent-1);
+}
+
+.lowest-tide-time {
+    font-size: 0.9rem;
+}
+
+.lowest-tide-level {
+    font-weight: 700;
+    color: var(--accent-1);
+    font-size: 1.1rem;
+}
+
 .house-price {
     font-size: 2.5rem;
     font-weight: 600;
