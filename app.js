@@ -141,6 +141,72 @@ function updateSunArc() {
     sunIndicator.style.opacity = (now < sunriseTime || now > sunsetTime) ? '0.3' : '0.7';
 }
 
+// --- Moon Phase Logic ---
+function fetchMoonPhase() {
+    const moonPhaseEl = document.getElementById('moon-phase');
+    const moonPhaseNameEl = document.getElementById('moon-phase-name');
+
+    // Calculate moon phase
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+
+    // Simple moon phase calculation (approximate)
+    // Based on the synodic month (29.53 days)
+    const knownNewMoon = new Date(2000, 0, 6, 18, 14); // Jan 6, 2000
+    const daysSinceKnownNewMoon = (today - knownNewMoon) / (1000 * 60 * 60 * 24);
+    const synodicMonth = 29.53058867;
+    const phase = (daysSinceKnownNewMoon % synodicMonth) / synodicMonth;
+
+    // Determine phase name and illumination
+    let phaseName = '';
+    let illumination = 0;
+
+    if (phase < 0.0625) {
+        phaseName = 'New Moon';
+        illumination = 0;
+    } else if (phase < 0.1875) {
+        phaseName = 'Waxing Crescent';
+        illumination = phase * 2;
+    } else if (phase < 0.3125) {
+        phaseName = 'First Quarter';
+        illumination = 0.5;
+    } else if (phase < 0.4375) {
+        phaseName = 'Waxing Gibbous';
+        illumination = 0.5 + (phase - 0.25) * 2;
+    } else if (phase < 0.5625) {
+        phaseName = 'Full Moon';
+        illumination = 1;
+    } else if (phase < 0.6875) {
+        phaseName = 'Waning Gibbous';
+        illumination = 1 - (phase - 0.5) * 2;
+    } else if (phase < 0.8125) {
+        phaseName = 'Last Quarter';
+        illumination = 0.5;
+    } else if (phase < 0.9375) {
+        phaseName = 'Waning Crescent';
+        illumination = 0.5 - (phase - 0.75) * 2;
+    } else {
+        phaseName = 'New Moon';
+        illumination = 0;
+    }
+
+    // Update moon graphic
+    // Use CSS to show illumination
+    const illuminationPercent = Math.round(illumination * 100);
+
+    if (phase < 0.5) {
+        // Waxing (right side illuminated)
+        moonPhaseEl.style.background = `linear-gradient(90deg, #1e293b ${100 - illuminationPercent}%, #f1f5f9 ${100 - illuminationPercent}%)`;
+    } else {
+        // Waning (left side illuminated)
+        moonPhaseEl.style.background = `linear-gradient(90deg, #f1f5f9 ${illuminationPercent}%, #1e293b ${illuminationPercent}%)`;
+    }
+
+    moonPhaseNameEl.textContent = phaseName;
+}
+
 // --- History Data (On This Day) ---
 async function fetchHistoryData() {
     const historyContainer = document.getElementById('history-data');

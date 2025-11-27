@@ -21,24 +21,38 @@
 
     <main class="dashboard-container">
         <header>
-            <div class="digital-display">
-                <div id="greeting" class="greeting">Good Morning</div>
-                <div id="current-date" class="date-display">MON, NOV 27, 2025</div>
-
-                <!-- Sun Arc Visual -->
-                <div class="sun-arc-wrapper">
-                    <div class="sun-times">
-                        <span id="sunrise-time">--:--</span>
-                        <span id="sunset-time">--:--</span>
-                    </div>
-                    <div class="sun-arc">
-                        <div class="sun-path"></div>
-                        <div class="sun-indicator" id="sun-indicator"></div>
+            <div class="header-layout">
+                <!-- Left: Sun Arc -->
+                <div class="header-left">
+                    <div class="sun-arc-wrapper">
+                        <div class="sun-times">
+                            <span id="sunrise-time">--:--</span>
+                            <span id="sunset-time">--:--</span>
+                        </div>
+                        <div class="sun-arc">
+                            <div class="sun-path"></div>
+                            <div class="sun-indicator" id="sun-indicator"></div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="clock-container">
-                    <div id="digital-clock" class="digital-clock">00:00:00</div>
+                <!-- Center: Clock & Date -->
+                <div class="header-center">
+                    <div id="greeting" class="greeting">Good Morning</div>
+                    <div id="current-date" class="date-display">MON, NOV 27, 2025</div>
+                    <div class="clock-container">
+                        <div id="digital-clock" class="digital-clock">00:00:00</div>
+                    </div>
+                </div>
+
+                <!-- Right: Moon Phase -->
+                <div class="header-right">
+                    <div class="moon-phase-wrapper">
+                        <div id="moon-phase" class="moon-phase">
+                            <!-- Moon graphic will be inserted here -->
+                        </div>
+                        <div id="moon-phase-name" class="moon-phase-name">Loading...</div>
+                    </div>
                 </div>
             </div>
         </header>
