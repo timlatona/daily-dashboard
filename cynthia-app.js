@@ -278,6 +278,7 @@ async function fetchQuote() {
 
     try {
         const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('API error');
         const data = await response.json();
 
         quoteContainer.innerHTML = `
@@ -286,6 +287,36 @@ async function fetchQuote() {
         `;
     } catch (error) {
         console.error('Error fetching quote:', error);
-        quoteContainer.innerHTML = '<p>Unable to load quote.</p>';
+        // Fallback quote
+        quoteContainer.innerHTML = `
+            <div class="quote-text">"The only way to do great work is to love what you do."</div>
+            <div class="quote-author">— Steve Jobs</div>
+        `;
+    }
+}
+
+// --- Dad Joke ---
+async function fetchDadJoke() {
+    const jokeContainer = document.getElementById('joke-data');
+    const apiUrl = 'https://icanhazdadjoke.com/';
+
+    try {
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('API error');
+        const data = await response.json();
+
+        jokeContainer.innerHTML = `
+            <div class="joke-text">${data.joke}</div>
+        `;
+    } catch (error) {
+        console.error('Error fetching dad joke:', error);
+        // Fallback joke
+        jokeContainer.innerHTML = `
+            <div class="joke-text">Why don't scientists trust atoms? Because they make up everything!</div>
+        `;
     }
 }

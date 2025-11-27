@@ -741,6 +741,15 @@ h2 {
     font-weight: 600;
 }
 
+/* Dad Joke Widget */
+.joke-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    text-align: center;
+    padding: 1rem;
+}
+
 /* NFL Widget Styles */
 .nfl-game {
     background: rgba(255, 255, 255, 0.05);
