@@ -11,19 +11,41 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDate();
     updateClock();
 
+    // Load saved theme
+    loadTheme();
+
     // Data fetching
     fetchTideData();
     fetchHouseValue();
     fetchHistoryData();
     fetchSunData();
+    fetchMoonPhase();
+    fetchWeather();
     fetchNFLData();
 
     // Intervals
     setInterval(updateClock, 1000); // Update clock every second
     setInterval(updateGreeting, 60000); // Check greeting every minute
     setInterval(updateSunArc, 60000); // Update sun position every minute
+    setInterval(fetchWeather, 600000); // Update weather every 10 minutes
+
+    // Theme switcher
+    document.getElementById('theme-select').addEventListener('change', (e) => {
+        setTheme(e.target.value);
+    });
 });
 
+// --- Theme System ---
+function loadTheme() {
+    const savedTheme = localStorage.getItem('dashboard-theme') || 'dark';
+    setTheme(savedTheme);
+    document.getElementById('theme-select').value = savedTheme;
+}
+
+function setTheme(themeName) {
+    document.body.setAttribute('data-theme', themeName);
+    localStorage.setItem('dashboard-theme', themeName);
+}
 // --- Clock & Greeting Logic ---
 function updateGreeting() {
     const greetingElement = document.getElementById('greeting');
