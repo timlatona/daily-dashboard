@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cynthia's Daily Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <select id="theme-select" class="theme-dropdown">
+            <option value="dark">🌙 Dark Mode</option>
+            <option value="japan">🗾 Japan</option>
+            <option value="ocean">🌊 Ocean</option>
+            <option value="sunset">🌅 Sunset</option>
+            <option value="forest">🌲 Forest</option>
+            <option value="metal">🤘 Metal</option>
+        </select>
+    </div>
+
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="dashboard-container">
+        <header>
+            <div class="header-layout">
+                <!-- Left: Sun Arc -->
+                <div class="header-left">
+                    <div class="sun-arc-wrapper">
+                        <div class="sun-times">
+                            <span id="sunrise-time">--:--</span>
+                            <span id="sunset-time">--:--</span>
+                        </div>
+                        <div class="sun-arc">
+                            <div class="sun-path"></div>
+                            <div class="sun-indicator" id="sun-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: Clock & Date -->
+                <div class="header-center">
+                    <div id="greeting" class="greeting">Good Morning</div>
+                    <div id="current-date" class="date-display">MON, NOV 27, 2025</div>
+                    <div class="clock-container">
+                        <div id="digital-clock" class="digital-clock">00:00:00</div>
+                    </div>
+                    <!-- Weather Strip -->
+                    <div id="weather-strip" class="weather-strip">
+                        <div class="loading-spinner-small"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Moon Phase -->
+                <div class="header-right">
+                    <div class="moon-phase-wrapper">
+                        <div id="moon-phase" class="moon-phase">
+                            <!-- Moon graphic will be inserted here -->
+                        </div>
+                        <div id="moon-phase-name" class="moon-phase-name">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Top Row: 3 Columns -->
+            <div class="top-row">
+                <!-- Tide Card -->
+                <div class="card glass-panel">
+                    <div class="card-icon">🌊</div>
+                    <h2>Tides</h2>
+                    <p class="subtitle">Des Moines, WA</p>
+                    <div id="tide-data" class="data-content">
+                        <div class="loading-spinner"></div>
+                    </div>
+                    <div id="lowest-tide-data" class="lowest-tide-container">
+                        <!-- Lowest daylight tide will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- House Value Card -->
+                <div class="card glass-panel">
+                    <div class="card-icon">🏡</div>
+                    <h2>House Value</h2>
+                    <p class="subtitle">Estimated Market Value</p>
+                    <div id="house-value-data" class="data-content">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+
+                <!-- History Card -->
+                <div class="card glass-panel">
+                    <div class="card-icon">📜</div>
+                    <h2>On This Day</h2>
+                    <p class="subtitle">Historical Fact</p>
+                    <div id="history-data" class="data-content">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row: Wide NFL Card -->
+            <div class="bottom-row">
+                <div class="card glass-panel wide-card" id="nfl-card">
+                    <div class="card-header-row">
+                        <div class="card-icon">🏈</div>
+                        <div>
+                            <h2>NFL Schedule</h2>
+                            <p class="subtitle" style="margin-bottom: 0;">Upcoming Games</p>
+                        </div>
+                    </div>
+                    <div id="nfl-data" class="data-content nfl-grid">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

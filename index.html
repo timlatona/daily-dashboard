@@ -4,131 +4,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Dashboard</title>
+    <title>Daily Dashboard - Choose Your View</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Share+Tech+Mono&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite alternate;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: #38bdf8;
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: #818cf8;
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(30px, 50px) scale(1.1);
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+            max-width: 600px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 3rem;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 2rem 3rem;
+            color: #f8fafc;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            min-width: 200px;
+        }
+
+        .dashboard-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .dashboard-button .emoji {
+            display: block;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Theme Switcher -->
-    <div class="theme-switcher">
-        <select id="theme-select" class="theme-dropdown">
-            <option value="dark">🌙 Dark Mode</option>
-            <option value="japan">🗾 Japan</option>
-            <option value="ocean">🌊 Ocean</option>
-            <option value="sunset">🌅 Sunset</option>
-            <option value="forest">🌲 Forest</option>
-            <option value="metal">🤘 Metal</option>
-        </select>
-    </div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
+    <div class="container">
+        <h1>Daily Dashboard</h1>
+        <p>Choose your personalized view</p>
 
-    <main class="dashboard-container">
-        <header>
-            <div class="header-layout">
-                <!-- Left: Sun Arc -->
-                <div class="header-left">
-                    <div class="sun-arc-wrapper">
-                        <div class="sun-times">
-                            <span id="sunrise-time">--:--</span>
-                            <span id="sunset-time">--:--</span>
-                        </div>
-                        <div class="sun-arc">
-                            <div class="sun-path"></div>
-                            <div class="sun-indicator" id="sun-indicator"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Center: Clock & Date -->
-                <div class="header-center">
-                    <div id="greeting" class="greeting">Good Morning</div>
-                    <div id="current-date" class="date-display">MON, NOV 27, 2025</div>
-                    <div class="clock-container">
-                        <div id="digital-clock" class="digital-clock">00:00:00</div>
-                    </div>
-                    <!-- Weather Strip -->
-                    <div id="weather-strip" class="weather-strip">
-                        <div class="loading-spinner-small"></div>
-                    </div>
-                </div>
-
-                <!-- Right: Moon Phase -->
-                <div class="header-right">
-                    <div class="moon-phase-wrapper">
-                        <div id="moon-phase" class="moon-phase">
-                            <!-- Moon graphic will be inserted here -->
-                        </div>
-                        <div id="moon-phase-name" class="moon-phase-name">Loading...</div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div class="dashboard-content">
-            <!-- Top Row: 3 Columns -->
-            <div class="top-row">
-                <!-- Tide Card -->
-                <div class="card glass-panel">
-                    <div class="card-icon">🌊</div>
-                    <h2>Tides</h2>
-                    <p class="subtitle">Des Moines, WA</p>
-                    <div id="tide-data" class="data-content">
-                        <div class="loading-spinner"></div>
-                    </div>
-                    <div id="lowest-tide-data" class="lowest-tide-container">
-                        <!-- Lowest daylight tide will be inserted here -->
-                    </div>
-                </div>
-
-                <!-- House Value Card -->
-                <div class="card glass-panel">
-                    <div class="card-icon">🏡</div>
-                    <h2>House Value</h2>
-                    <p class="subtitle">Estimated Market Value</p>
-                    <div id="house-value-data" class="data-content">
-                        <div class="loading-spinner"></div>
-                    </div>
-                </div>
-
-                <!-- History Card -->
-                <div class="card glass-panel">
-                    <div class="card-icon">📜</div>
-                    <h2>On This Day</h2>
-                    <p class="subtitle">Historical Fact</p>
-                    <div id="history-data" class="data-content">
-                        <div class="loading-spinner"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bottom Row: Wide NFL Card -->
-            <div class="bottom-row">
-                <div class="card glass-panel wide-card" id="nfl-card">
-                    <div class="card-header-row">
-                        <div class="card-icon">🏈</div>
-                        <div>
-                            <h2>NFL Schedule</h2>
-                            <p class="subtitle" style="margin-bottom: 0;">Upcoming Games</p>
-                        </div>
-                    </div>
-                    <div id="nfl-data" class="data-content nfl-grid">
-                        <div class="loading-spinner"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="button-container">
+            <a href="tim.html" class="dashboard-button">
+                <span class="emoji">👨</span>
+                Tim's Dashboard
+            </a>
+            <a href="cynthia.html" class="dashboard-button">
+                <span class="emoji">👩</span>
+                Cynthia's Dashboard
+            </a>
         </div>
-    </main>
-
-    <script src="app.js"></script>
+    </div>
 </body>
 
 </html>
