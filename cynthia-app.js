@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Theme System ---
 function loadTheme() {
-    const savedTheme = localStorage.getItem('cynthia-dashboard-theme') || 'dark';
+    const savedTheme = localStorage.getItem('cynthia-dashboard-theme') || 'floral';
     setTheme(savedTheme);
     document.getElementById('theme-select').value = savedTheme;
 }
