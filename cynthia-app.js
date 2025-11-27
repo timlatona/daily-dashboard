@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Data fetching
     fetchQuote();
+    fetchDadJoke();
     fetchSunData();
     fetchMoonPhase();
     fetchWeather();
