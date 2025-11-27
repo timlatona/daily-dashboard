@@ -750,6 +750,35 @@ h2 {
     padding: 1rem;
 }
 
+/* National Day Widget */
+.national-day-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.national-day-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1rem;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.national-day-list li:last-child {
+    border-bottom: none;
+}
+
+.national-day-empty {
+    text-align: center;
+    color: #cbd5e1;
+    font-style: italic;
+    padding: 1rem;
+}
+
 /* NFL Widget Styles */
 .nfl-game {
     background: rgba(255, 255, 255, 0.05);
