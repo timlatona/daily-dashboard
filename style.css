@@ -126,14 +126,14 @@ body[data-theme="metal"] .glass-panel {
             2% 85%, 0% 82%, 2% 78%, 0% 75%, 2% 72%, 0% 68%, 2% 65%, 0% 62%, 2% 58%,
             0% 55%, 2% 52%, 0% 48%, 2% 45%, 0% 42%, 2% 38%, 0% 35%, 2% 32%, 0% 28%,
             2% 25%, 0% 22%, 2% 18%, 0% 15%, 2% 12%, 0% 8%);
-    background: rgba(20, 0, 0, 0.8) !important;
+    background: rgba(15, 0, 0, 0.9) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 3px solid #dc143c !important;
+    border: none !important;
     box-shadow:
-        0 0 30px rgba(220, 20, 60, 0.5),
-        inset 0 0 30px rgba(139, 0, 0, 0.3),
-        0 8px 32px rgba(0, 0, 0, 0.8) !important;
+        0 0 20px rgba(0, 0, 0, 0.8),
+        inset 0 0 40px rgba(139, 0, 0, 0.2),
+        0 8px 32px rgba(0, 0, 0, 0.9) !important;
 }
 
 /* Metal theme text effects */
