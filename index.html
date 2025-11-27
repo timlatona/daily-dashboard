@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="dashboard-container">
+        <header>
+            <div class="digital-display">
+                <div id="greeting" class="greeting">Good Morning</div>
+                <div id="current-date" class="date-display">MON, NOV 27, 2025</div>
+
+                <!-- Sun Arc Visual -->
+                <div class="sun-arc-wrapper">
+                    <div class="sun-times">
+                        <span id="sunrise-time">--:--</span>
+                        <span id="sunset-time">--:--</span>
+                    </div>
+                    <div class="sun-arc">
+                        <div class="sun-path"></div>
+                        <div class="sun-indicator" id="sun-indicator"></div>
+                    </div>
+                </div>
+
+                <div class="clock-container">
+                    <div id="digital-clock" class="digital-clock">00:00:00</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Top Row: 3 Columns -->
+            <div class="top-row">
+                <!-- Tide Card -->
+                <div class="card glass-panel">
+                    <div class="card-icon">🌊</div>
+                    <h2>Tides</h2>
+                    <p class="subtitle">Des Moines, WA</p>
+                    <div id="tide-data" class="data-content">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+
+                <!-- House Value Card -->
+                <div class="card glass-panel">
+                    <div class="card-icon">🏡</div>
+                    <h2>House Value</h2>
+                    <p class="subtitle">Estimated Market Value</p>
+                    <div id="house-value-data" class="data-content">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+
+                <!-- History Card -->
+                <div class="card glass-panel">
+                    <div class="card-icon">📜</div>
+                    <h2>On This Day</h2>
+                    <p class="subtitle">Historical Fact</p>
+                    <div id="history-data" class="data-content">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row: Wide NFL Card -->
+            <div class="bottom-row">
+                <div class="card glass-panel wide-card" id="nfl-card">
+                    <div class="card-header-row">
+                        <div class="card-icon">🏈</div>
+                        <div>
+                            <h2>NFL Schedule</h2>
+                            <p class="subtitle" style="margin-bottom: 0;">Upcoming Games</p>
+                        </div>
+                    </div>
+                    <div id="nfl-data" class="data-content nfl-grid">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

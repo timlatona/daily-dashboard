@@ -1,0 +1,467 @@
+:root {
+    --bg-color: #0f172a;
+    --text-color: #f8fafc;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --accent-1: #38bdf8;
+    --accent-2: #818cf8;
+    --accent-3: #c084fc;
+    --accent-4: #4ade80;
+    /* Green */
+    --clock-red: #ff3333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Background Animations */
+.background-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.6;
+    animation: float 20s infinite alternate;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--accent-1);
+    top: -100px;
+    left: -100px;
+}
+
+.blob-2 {
+    width: 500px;
+    height: 500px;
+    background: var(--accent-2);
+    bottom: -150px;
+    right: -150px;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 300px;
+    height: 300px;
+    background: var(--accent-3);
+    top: 40%;
+    left: 40%;
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(30px, 50px) scale(1.1);
+    }
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+header {
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #fff, #cbd5e1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Digital Display Area */
+.digital-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.date-display {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.5rem;
+    color: #cbd5e1;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.clock-container {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    margin-top: 0.5rem;
+}
+
+/* Sun Arc Visual */
+.sun-arc-wrapper {
+    position: relative;
+    width: 300px;
+    height: 60px;
+    /* Reduced height */
+    margin: 0.75rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.sun-times {
+    position: absolute;
+    bottom: -20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: rgba(148, 163, 184, 0.6);
+    /* More subtle */
+    padding: 0 10px;
+}
+
+.sun-arc {
+    width: 200px;
+    height: 100px;
+    /* Full circle height for border-radius trick */
+    position: relative;
+    overflow: hidden;
+}
+
+.sun-path {
+    width: 200px;
+    height: 200px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    /* Thinner, more subtle */
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+}
+
+.sun-indicator {
+    width: 16px;
+    height: 16px;
+    background: #fbbf24;
+    /* Sun yellow */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    box-shadow: 0 0 15px #fbbf24;
+    transform: translate(-50%, -50%);
+    /* Center the dot itself */
+    /* We will rotate this container or calculate position in JS */
+    /* Actually, easier to rotate a container that holds the sun at the edge */
+    display: none;
+    /* Hidden until JS calculates position */
+}
+
+/* Better approach for Sun Arc: SVG or simpler CSS rotation */
+/* Let's use a container that rotates */
+.sun-arc {
+    width: 220px;
+    height: 110px;
+    /* Half height */
+    overflow: hidden;
+    position: relative;
+}
+
+.sun-path {
+    width: 200px;
+    height: 200px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.sun-indicator {
+    width: 10px;
+    /* Smaller */
+    height: 10px;
+    background: #fbbf24;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+    /* Softer glow */
+    position: absolute;
+    display: block;
+    transition: all 1s ease;
+    opacity: 0.7;
+    /* More subtle */
+}
+
+.digital-clock {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 4rem;
+    color: var(--clock-red);
+    text-shadow: 0 0 10px rgba(255, 51, 51, 0.5), 0 0 20px rgba(255, 51, 51, 0.3);
+    letter-spacing: 4px;
+    line-height: 1;
+}
+
+/* Grid Layout */
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    /* Vertical gap between rows */
+    width: 100%;
+}
+
+.top-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.bottom-row {
+    width: 100%;
+}
+
+/* Glassmorphism Cards */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    /* Ensure equal height in grid */
+    display: flex;
+    flex-direction: column;
+}
+
+.glass-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    margin-bottom: 1.5rem;
+}
+
+.data-content {
+    flex-grow: 1;
+    /* Fill remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Wide Card Specifics */
+.wide-card {
+    min-height: 250px;
+}
+
+.card-header-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-header-row .card-icon {
+    margin-bottom: 0;
+}
+
+/* NFL Grid Layout for Wide Card */
+.nfl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Data Styling */
+.tide-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tide-item:last-child {
+    border-bottom: none;
+}
+
+.tide-time {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.tide-level {
+    color: var(--accent-1);
+}
+
+.house-price {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--accent-3);
+    margin-bottom: 0.5rem;
+}
+
+.house-change {
+    font-size: 0.9rem;
+    color: var(--accent-4);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* History Widget */
+.history-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #e2e8f0;
+    font-style: italic;
+    margin-bottom: 0.75rem;
+}
+
+.history-year {
+    font-weight: 700;
+    color: var(--accent-2);
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.history-link {
+    display: inline-block;
+    color: var(--accent-1);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.history-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* NFL Widget Styles */
+.nfl-game {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.game-header {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.game-matchup {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.game-time {
+    color: var(--accent-2);
+    font-size: 0.9rem;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--accent-1);
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .top-row {
+        grid-template-columns: 1fr;
+        /* Stack on mobile */
+    }
+
+    .nfl-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .digital-clock {
+        font-size: 3rem;
+    }
+
+    .dashboard-container {
+        padding: 1rem;
+    }
+}
