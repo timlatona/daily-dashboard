@@ -324,6 +324,23 @@ async function fetchDadJoke() {
 }
 
 // --- National Day ---
+const nationalDays = {
+    '11-27': ['Thanksgiving Day 🦃', 'National Craft Jerky Day 🥩', 'Bavarian Cream Pie Day 🥧'],
+    '11-28': ['Black Friday 🛍️', 'National French Toast Day 🍞', 'Day of Listening 👂'],
+    '11-29': ['Square Dancing Day 💃', 'Electronic Greetings Day 📧', 'Chocolates Day 🍫'],
+    '11-30': ['Computer Security Day 💻', 'Mason Jar Day 🫙', 'Stay Home Because You\'re Well Day 🏠'],
+    '12-01': ['Eat a Red Apple Day 🍎', 'World AIDS Day 🎗️', 'Christmas Lights Day 🎄'],
+    '12-02': ['National Mutt Day 🐕', 'Giving Tuesday 💝', 'Fritters Day 🍩'],
+    '12-03': ['Disability Day ♿', 'Roof Over Your Head Day 🏠', 'Make a Gift Day 🎁'],
+    '12-04': ['National Cookie Day 🍪', 'Dice Day 🎲', 'Sock Day 🧦'],
+    '12-05': ['Bathtub Party Day 🛁', 'International Ninja Day 🥷', 'Soil Day 🌱'],
+    '12-06': ['St. Nicholas Day 🎅', 'Microwave Oven Day microwave', 'Put on Your Own Shoes Day 👟'],
+    '12-07': ['Cotton Candy Day 🍬', 'Pearl Harbor Remembrance 🇺🇸', 'Letter Writing Day ✉️'],
+    '12-08': ['National Brownie Day 🍫', 'Time Traveler Day ⏳', 'Pretend to be a Time Traveler Day'],
+    '12-09': ['National Llama Day 🦙', 'Pastry Day 🥐', 'Techno Day 🎵'],
+    '12-10': ['Human Rights Day 🕊️', 'Nobel Prize Day 🏅', 'Lager Day 🍺']
+};
+
 async function fetchNationalDay() {
     const container = document.getElementById('national-day-data');
     const today = new Date();
@@ -355,4 +372,4 @@ async function fetchNationalDay() {
     html += '</div>';
     container.innerHTML = html;
 }
-```
+
