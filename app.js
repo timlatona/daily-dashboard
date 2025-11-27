@@ -207,6 +207,89 @@ function fetchMoonPhase() {
     moonPhaseNameEl.textContent = phaseName;
 }
 
+// --- Weather Data ---
+async function fetchWeather() {
+    const weatherStrip = document.getElementById('weather-strip');
+
+    // Federal Way, WA coordinates
+    const lat = 47.3223;
+    const lon = -122.3126;
+
+    // Using Open-Meteo API (free, no key required)
+    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America/Los_Angeles`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.current) {
+            const temp = Math.round(data.current.temperature_2m);
+            const feelsLike = Math.round(data.current.apparent_temperature);
+            const humidity = data.current.relative_humidity_2m;
+            const windSpeed = Math.round(data.current.wind_speed_10m);
+            const weatherCode = data.current.weather_code;
+
+            // Map weather codes to icons and descriptions
+            const weatherInfo = getWeatherInfo(weatherCode);
+
+            weatherStrip.innerHTML = `
+                <div class="weather-item">
+                    <span class="weather-icon">${weatherInfo.icon}</span>
+                    <span class="weather-condition">${weatherInfo.description}</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">🌡️</span>
+                    <span class="weather-temp">${temp}°F</span>
+                    <span style="opacity: 0.6; font-size: 0.8rem;">(feels ${feelsLike}°)</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">💧</span>
+                    <span>${humidity}%</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">💨</span>
+                    <span>${windSpeed} mph</span>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error fetching weather:', error);
+        weatherStrip.innerHTML = '<span style="opacity: 0.5;">Weather unavailable</span>';
+    }
+}
+
+function getWeatherInfo(code) {
+    // WMO Weather interpretation codes
+    const weatherMap = {
+        0: { icon: '☀️', description: 'Clear' },
+        1: { icon: '🌤️', description: 'Mostly Clear' },
+        2: { icon: '⛅', description: 'Partly Cloudy' },
+        3: { icon: '☁️', description: 'Overcast' },
+        45: { icon: '🌫️', description: 'Foggy' },
+        48: { icon: '🌫️', description: 'Foggy' },
+        51: { icon: '🌦️', description: 'Light Drizzle' },
+        53: { icon: '🌦️', description: 'Drizzle' },
+        55: { icon: '🌦️', description: 'Heavy Drizzle' },
+        61: { icon: '🌧️', description: 'Light Rain' },
+        63: { icon: '🌧️', description: 'Rain' },
+        65: { icon: '🌧️', description: 'Heavy Rain' },
+        71: { icon: '🌨️', description: 'Light Snow' },
+        73: { icon: '🌨️', description: 'Snow' },
+        75: { icon: '🌨️', description: 'Heavy Snow' },
+        77: { icon: '🌨️', description: 'Snow Grains' },
+        80: { icon: '🌦️', description: 'Light Showers' },
+        81: { icon: '🌦️', description: 'Showers' },
+        82: { icon: '🌦️', description: 'Heavy Showers' },
+        85: { icon: '🌨️', description: 'Light Snow Showers' },
+        86: { icon: '🌨️', description: 'Snow Showers' },
+        95: { icon: '⛈️', description: 'Thunderstorm' },
+        96: { icon: '⛈️', description: 'Thunderstorm + Hail' },
+        99: { icon: '⛈️', description: 'Thunderstorm + Hail' }
+    };
+
+    return weatherMap[code] || { icon: '🌡️', description: 'Unknown' };
+}
+
 // --- History Data (On This Day) ---
 async function fetchHistoryData() {
     const historyContainer = document.getElementById('history-data');

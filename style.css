@@ -301,6 +301,50 @@ h1 {
     letter-spacing: 1px;
 }
 
+/* Weather Strip */
+.weather-strip {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    min-width: 400px;
+    justify-content: center;
+}
+
+.weather-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.weather-icon {
+    font-size: 1.2rem;
+}
+
+.weather-temp {
+    font-weight: 600;
+    color: var(--accent-1);
+}
+
+.weather-condition {
+    color: #cbd5e1;
+}
+
+.loading-spinner-small {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--accent-1);
+    animation: spin 1s ease-in-out infinite;
+}
+
 /* Grid Layout */
 .dashboard-content {
     display: flex;
