@@ -322,3 +322,37 @@ async function fetchDadJoke() {
         `;
     }
 }
+
+// --- National Day ---
+async function fetchNationalDay() {
+    const container = document.getElementById('national-day-data');
+    const today = new Date();
+    let html = '<div class="national-day-scroll">';
+
+    for (let i = 0; i < 14; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const key = `${month}-${day}`;
+        const dateString = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+        const holidays = nationalDays[key]; // Assuming nationalDays is defined elsewhere
+
+        if (holidays) {
+            html += `
+                <div class="national-day-group">
+                    <div class="national-day-date">${i === 0 ? 'Today' : dateString}</div>
+                    <ul class="national-day-list">
+                        ${holidays.map(holiday => `<li>${holiday}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+}
+```
