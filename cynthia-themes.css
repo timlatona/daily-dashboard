@@ -2,8 +2,8 @@
 
 /* Floral Garden Theme */
 body[data-theme="floral"] {
-    --bg-color: #faf5f9;
-    --text-color: #4a1942;
+    --bg-color: #1a0d1a;
+    --text-color: #f5e6f0;
     --glass-bg: rgba(255, 192, 203, 0.15);
     --glass-border: rgba(219, 112, 147, 0.3);
     --accent-1: #db7093;
@@ -18,8 +18,8 @@ body[data-theme="floral"] {
 
 /* Beach Vibes Theme */
 body[data-theme="beach"] {
-    --bg-color: #e8f4f8;
-    --text-color: #1a4d5e;
+    --bg-color: #0a1a1f;
+    --text-color: #e0f2f7;
     --glass-bg: rgba(135, 206, 235, 0.12);
     --glass-border: rgba(100, 200, 215, 0.3);
     --accent-1: #64c8d7;
@@ -34,8 +34,8 @@ body[data-theme="beach"] {
 
 /* Sun Hat Theme */
 body[data-theme="sunhat"] {
-    --bg-color: #fffaf0;
-    --text-color: #5c4033;
+    --bg-color: #1f1508;
+    --text-color: #f5ead3;
     --glass-bg: rgba(255, 218, 185, 0.15);
     --glass-border: rgba(255, 200, 124, 0.3);
     --accent-1: #ffc87c;
@@ -50,8 +50,8 @@ body[data-theme="sunhat"] {
 
 /* Rainy Day Theme */
 body[data-theme="rainy"] {
-    --bg-color: #e6eef5;
-    --text-color: #2c3e50;
+    --bg-color: #0d1117;
+    --text-color: #e6eef5;
     --glass-bg: rgba(108, 122, 137, 0.12);
     --glass-border: rgba(149, 165, 166, 0.3);
     --accent-1: #6c7a89;
@@ -82,8 +82,8 @@ body[data-theme="cozy"] {
 
 /* Lavender Dreams Theme */
 body[data-theme="lavender"] {
-    --bg-color: #f8f4fc;
-    --text-color: #4a2c5e;
+    --bg-color: #1a0f1f;
+    --text-color: #f0e6f5;
     --glass-bg: rgba(186, 148, 214, 0.12);
     --glass-border: rgba(186, 148, 214, 0.3);
     --accent-1: #ba94d6;
