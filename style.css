@@ -724,6 +724,23 @@ h2 {
     text-decoration: underline;
 }
 
+/* Quote Widget */
+.quote-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    font-style: italic;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.quote-author {
+    font-size: 1rem;
+    color: var(--accent-1);
+    text-align: right;
+    font-weight: 600;
+}
+
 /* NFL Widget Styles */
 .nfl-game {
     background: rgba(255, 255, 255, 0.05);
