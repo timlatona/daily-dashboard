@@ -255,6 +255,77 @@
             background: var(--accent-1);
         }
 
+        /* Content Sections */
+        .content-section {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .maker-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .story-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Testimonials */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .quote {
+            font-style: italic;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .author {
+            font-weight: bold;
+            color: var(--accent-3);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 1px solid var(--glass-border);
+        }
+
+        .gallery-img:hover {
+            transform: scale(1.05);
+        }
+
         /* Lightbox Styles */
         .lightbox {
             display: none;
@@ -363,6 +434,52 @@
                 <button class="carousel-indicator"></button>
             </div>
         </div>
+
+        <!-- About the Maker -->
+        <section class="content-section glass-panel">
+            <div class="maker-icon">👩‍🎨</div>
+            <h2>About the Maker</h2>
+            <p class="story-text">
+                What began as a quiet summer curiosity at just ten years old has blossomed into a vibrant journey of
+                creativity.
+                A needle, some thread, and a spark of imagination ignited a passion for sewing that simply couldn't be
+                contained.
+                Now, Calla Coastal is the proud vision of a dedicated 13-year-old artisan. Each bag is lovingly
+                handcrafted,
+                transforming from a simple piece of fabric into a traveling companion that has already found its way to
+                corners of the world far beyond the sewing room where it was born.
+            </p>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="content-section glass-panel">
+            <h2>What People Are Saying</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="quote">"I love my Calla bag, it has gone with me on multiple tours in my busy job as a
+                        tour manager for large acts. I loved my first one so much I ordered a second!"</p>
+                    <p class="author">- LM</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="quote">"This bag organizes my tech life... all of my cords and cables, adaptors and
+                        dongles are safely stowed in it! Anytime I pull it out at work I get comments on how great it
+                        looks, then shock when I say that it was made by a 13 year old!"</p>
+                    <p class="author">- TL</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Gallery -->
+        <section class="content-section glass-panel">
+            <h2>Collection Gallery</h2>
+            <div class="gallery-grid">
+                <img src="images/bag-1.jpg" alt="Bag 1" class="gallery-img">
+                <img src="images/bag-2.jpg" alt="Bag 2" class="gallery-img">
+                <img src="images/bag-3.jpg" alt="Bag 3" class="gallery-img">
+                <img src="images/bag-4.jpg" alt="Bag 4" class="gallery-img">
+                <img src="images/bag-5.jpg" alt="Bag 5" class="gallery-img">
+            </div>
+        </section>
 
         <div class="contact-bar">
             <a href="https://instagram.com/CallaCoastal" target="_blank" class="contact-item">
@@ -483,9 +600,11 @@
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxClose = document.querySelector('.lightbox-close');
-        const carouselImages = document.querySelectorAll('.carousel-slide img');
 
-        carouselImages.forEach(img => {
+        // Select both carousel and gallery images
+        const allImages = document.querySelectorAll('.carousel-slide img, .gallery-img');
+
+        allImages.forEach(img => {
             img.addEventListener('click', () => {
                 lightbox.classList.add('active');
                 lightboxImg.src = img.src;
