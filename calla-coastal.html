@@ -107,6 +107,100 @@
         .back-link:hover {
             opacity: 1;
         }
+
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+            padding: 1rem;
+            border-radius: 20px;
+        }
+
+        .carousel-track-container {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        .carousel-track {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            position: relative;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .carousel-btn.prev {
+            left: 20px;
+        }
+
+        .carousel-btn.next {
+            right: 20px;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            gap: 10px;
+        }
+
+        .carousel-indicator {
+            border: none;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .carousel-indicator.current-slide {
+            background: var(--accent-1);
+        }
     </style>
 </head>
 
@@ -126,6 +220,29 @@
             <h1>Calla Coastal</h1>
             <div class="brand-subtitle">Handcrafted Bags</div>
         </header>
+
+        <!-- Image Carousel -->
+        <div class="carousel-container glass-panel">
+            <button class="carousel-btn prev">❮</button>
+            <div class="carousel-track-container">
+                <ul class="carousel-track">
+                    <li class="carousel-slide current-slide"><img src="images/bag-1.jpg" alt="Handcrafted Bag 1"></li>
+                    <li class="carousel-slide"><img src="images/bag-2.jpg" alt="Handcrafted Bag 2"></li>
+                    <li class="carousel-slide"><img src="images/bag-3.jpg" alt="Handcrafted Bag 3"></li>
+                    <li class="carousel-slide"><img src="images/bag-4.jpg" alt="Handcrafted Bag 4"></li>
+                    <li class="carousel-slide"><img src="images/bag-5.jpg" alt="Handcrafted Bag 5"></li>
+                </ul>
+            </div>
+            <button class="carousel-btn next">❯</button>
+
+            <div class="carousel-nav">
+                <button class="carousel-indicator current-slide"></button>
+                <button class="carousel-indicator"></button>
+                <button class="carousel-indicator"></button>
+                <button class="carousel-indicator"></button>
+                <button class="carousel-indicator"></button>
+            </div>
+        </div>
 
         <div class="contact-grid">
             <!-- Instagram -->
@@ -149,6 +266,88 @@
             </div>
         </div>
     </main>
+
+    <script>
+        const track = document.querySelector('.carousel-track');
+        const slides = Array.from(track.children);
+        const nextButton = document.querySelector('.carousel-btn.next');
+        const prevButton = document.querySelector('.carousel-btn.prev');
+        const dotsNav = document.querySelector('.carousel-nav');
+        const dots = Array.from(dotsNav.children);
+
+        const slideWidth = slides[0].getBoundingClientRect().width;
+
+        // Arrange slides next to one another
+        const setSlidePosition = (slide, index) => {
+            slide.style.left = slideWidth * index + 'px';
+        };
+        slides.forEach(setSlidePosition);
+
+        const moveToSlide = (track, currentSlide, targetSlide) => {
+            track.style.transform = 'translateX(-' + targetSlide.style.left + ')';
+            currentSlide.classList.remove('current-slide');
+            targetSlide.classList.add('current-slide');
+        }
+
+        const updateDots = (currentDot, targetDot) => {
+            currentDot.classList.remove('current-slide');
+            targetDot.classList.add('current-slide');
+        }
+
+        // Next Button
+        nextButton.addEventListener('click', e => {
+            const currentSlide = track.querySelector('.current-slide');
+            let nextSlide = currentSlide.nextElementSibling;
+            const currentDot = dotsNav.querySelector('.current-slide');
+            let nextDot = currentDot.nextElementSibling;
+
+            // Loop back to start
+            if (!nextSlide) {
+                nextSlide = slides[0];
+                nextDot = dots[0];
+            }
+
+            moveToSlide(track, currentSlide, nextSlide);
+            updateDots(currentDot, nextDot);
+        });
+
+        // Prev Button
+        prevButton.addEventListener('click', e => {
+            const currentSlide = track.querySelector('.current-slide');
+            let prevSlide = currentSlide.previousElementSibling;
+            const currentDot = dotsNav.querySelector('.current-slide');
+            let prevDot = currentDot.previousElementSibling;
+
+            // Loop to end
+            if (!prevSlide) {
+                prevSlide = slides[slides.length - 1];
+                prevDot = dots[dots.length - 1];
+            }
+
+            moveToSlide(track, currentSlide, prevSlide);
+            updateDots(currentDot, prevDot);
+        });
+
+        // Dot Nav
+        dotsNav.addEventListener('click', e => {
+            const targetDot = e.target.closest('button');
+
+            if (!targetDot) return;
+
+            const currentSlide = track.querySelector('.current-slide');
+            const currentDot = dotsNav.querySelector('.current-slide');
+            const targetIndex = dots.findIndex(dot => dot === targetDot);
+            const targetSlide = slides[targetIndex];
+
+            moveToSlide(track, currentSlide, targetSlide);
+            updateDots(currentDot, targetDot);
+        });
+
+        // Auto-play
+        setInterval(() => {
+            nextButton.click();
+        }, 5000);
+    </script>
 </body>
 
 </html>
