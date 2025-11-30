@@ -7,45 +7,76 @@
     <title>Calla Coastal - Handcrafted Bags</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+    <link <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cynthia-themes.css">
     <style>
         /* Override/Add specific styles for Calla Coastal */
         body {
-            /* Force Beach Theme colors initially */
-            --bg-color: #0a1a1f;
-            --text-color: #e0f2f7;
-            --glass-bg: rgba(135, 206, 235, 0.12);
-            --glass-border: rgba(100, 200, 215, 0.3);
+            /* Default Light (Beach) Theme */
+            --bg-color: #f0f8ff;
+            --text-color: #1a4d5e;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
             --accent-1: #64c8d7;
             --accent-2: #87ceeb;
-            --accent-3: #f4a460;
-            --accent-4: #ffd700;
-            --blob-1: #87ceeb;
-            --blob-2: #64c8d7;
-            --blob-3: #f4a460;
+            --accent-3: #d2691e;
+
+            background-image: url('images/calla-bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Dark Mode Override */
+        body[data-theme="dark"] {
+            --bg-color: #0a1a1f;
+            --text-color: #e0f2f7;
+            --glass-bg: rgba(0, 0, 0, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-1: #64c8d7;
+            --accent-2: #87ceeb;
+            --accent-3: #ffd700;
+        }
+
+        /* Hide the blobs since we have a background image */
+        .background-blobs {
+            display: none;
         }
 
         h1 {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 4rem;
-            background: linear-gradient(to right, #fff, #87ceeb);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Great Vibes', cursive;
+            font-size: 5rem;
+            color: var(--text-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
             margin-bottom: 0.5rem;
+            background: none;
+            -webkit-text-fill-color: initial;
+        }
+
+        body[data-theme="dark"] h1 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            color: #fff;
         }
 
         .brand-subtitle {
-            font-size: 1.2rem;
-            color: var(--accent-3);
-            letter-spacing: 3px;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            letter-spacing: 4px;
             text-transform: uppercase;
             margin-bottom: 3rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        body[data-theme="dark"] .brand-subtitle {
+            color: #e0f2f7;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .contact-grid {
@@ -100,12 +131,31 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
+            font-weight: 600;
+            background: var(--glass-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            z-index: 100;
         }
 
-        .back-link:hover {
-            opacity: 1;
+        .theme-switch-container {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .theme-select {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-weight: 600;
         }
 
         /* Carousel Styles */
@@ -204,16 +254,19 @@
     </style>
 </head>
 
-<body data-theme="beach">
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
+<body data-theme="light">
+    <!-- Blobs removed -->
 
     <a href="index.html" class="back-link">
         <span>←</span> Back to Dashboard
     </a>
+
+    <div class="theme-switch-container">
+        <select id="theme-select" class="theme-select">
+            <option value="light">☀️ Light Mode</option>
+            <option value="dark">🌙 Dark Mode</option>
+        </select>
+    </div>
 
     <main class="dashboard-container" style="align-items: center; text-align: center;">
         <header>
@@ -268,6 +321,22 @@
     </main>
 
     <script>
+        // Theme Switcher
+        const themeSelect = document.getElementById('theme-select');
+        const body = document.body;
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('calla-theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        themeSelect.value = savedTheme;
+
+        themeSelect.addEventListener('change', (e) => {
+            const theme = e.target.value;
+            body.setAttribute('data-theme', theme);
+            localStorage.setItem('calla-theme', theme);
+        });
+
+        // Carousel Logic
         const track = document.querySelector('.carousel-track');
         const slides = Array.from(track.children);
         const nextButton = document.querySelector('.carousel-btn.next');
