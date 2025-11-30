@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calla Coastal - Handcrafted Bags</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cynthia-themes.css">
+    <style>
+        /* Override/Add specific styles for Calla Coastal */
+        body {
+            /* Force Beach Theme colors initially */
+            --bg-color: #0a1a1f;
+            --text-color: #e0f2f7;
+            --glass-bg: rgba(135, 206, 235, 0.12);
+            --glass-border: rgba(100, 200, 215, 0.3);
+            --accent-1: #64c8d7;
+            --accent-2: #87ceeb;
+            --accent-3: #f4a460;
+            --accent-4: #ffd700;
+            --blob-1: #87ceeb;
+            --blob-2: #64c8d7;
+            --blob-3: #f4a460;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 4rem;
+            background: linear-gradient(to right, #fff, #87ceeb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand-subtitle {
+            font-size: 1.2rem;
+            color: var(--accent-3);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .contact-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .contact-link:hover {
+            background: var(--accent-1);
+            color: #000;
+            border-color: var(--accent-1);
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--text-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body data-theme="beach">
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <a href="index.html" class="back-link">
+        <span>←</span> Back to Dashboard
+    </a>
+
+    <main class="dashboard-container" style="align-items: center; text-align: center;">
+        <header>
+            <h1>Calla Coastal</h1>
+            <div class="brand-subtitle">Handcrafted Bags</div>
+        </header>
+
+        <div class="contact-grid">
+            <!-- Instagram -->
+            <div class="glass-panel contact-card">
+                <div class="contact-icon">📸</div>
+                <h2>Instagram</h2>
+                <p class="subtitle">Follow our latest creations</p>
+                <a href="https://instagram.com/CallaCoastal" target="_blank" class="contact-link">
+                    @CallaCoastal
+                </a>
+            </div>
+
+            <!-- Email -->
+            <div class="glass-panel contact-card">
+                <div class="contact-icon">✉️</div>
+                <h2>Email Us</h2>
+                <p class="subtitle">Place an order or say hello</p>
+                <a href="mailto:CallaCoastal@gmail.com" class="contact-link">
+                    CallaCoastal@gmail.com
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
