@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchMoonPhase();
     fetchWeather();
     fetchNFLData();
+    renderLastUpdated();
 
     // Intervals
     setInterval(updateClock, 1000); // Update clock every second
@@ -323,7 +324,15 @@ async function fetchHistoryData() {
     const apiUrl = `https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/events/${month}/${day}`;
 
     try {
-        const response = await fetch(apiUrl);
+        // Wikipedia requires a User-Agent header
+        const response = await fetch(apiUrl, {
+            headers: {
+                'User-Agent': 'DailyDashboard/1.0 (tim@example.com)'
+            }
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
         const data = await response.json();
 
         // Get a random event from the list
@@ -347,6 +356,32 @@ async function fetchHistoryData() {
     } catch (error) {
         console.error('Error fetching history data:', error);
         historyContainer.innerHTML = '<p>Unable to load history fact.</p>';
+    }
+}
+
+// --- Footer Info ---
+function renderLastUpdated() {
+    const LAST_UPDATED = 'December 1, 2025 at 12:10 PM PT';
+
+    const footer = document.createElement('div');
+    footer.id = 'dashboard-footer';
+    footer.style.cssText = `
+        text-align: center;
+        padding: 20px;
+        opacity: 0.6;
+        font-size: 0.8rem;
+        color: var(--text-color);
+        margin-top: 20px;
+        width: 100%;
+    `;
+    footer.innerHTML = `Website Updated At: ${LAST_UPDATED}`;
+
+    // Append to the main container if possible, else body
+    const container = document.querySelector('.dashboard-container');
+    if (container) {
+        container.appendChild(footer);
+    } else {
+        document.body.appendChild(footer);
     }
 }
 
