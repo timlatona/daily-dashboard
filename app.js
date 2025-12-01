@@ -511,7 +511,37 @@ function fetchHouseValue() {
 // --- NFL Data Integration ---
 async function fetchNFLData() {
     const nflContainer = document.getElementById('nfl-data');
-    const apiUrl = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard';
+    // Add timestamp to prevent caching
+    const apiUrl = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?t=${new Date().getTime()}`;
+
+    // Add Refresh Button if not present
+    let refreshBtn = document.getElementById('nfl-refresh-btn');
+    if (!refreshBtn) {
+        // Find the header in the parent container
+        const widgetHeader = nflContainer.parentElement.querySelector('h2');
+        if (widgetHeader) {
+            refreshBtn = document.createElement('button');
+            refreshBtn.id = 'nfl-refresh-btn';
+            refreshBtn.innerHTML = '↻';
+            refreshBtn.title = 'Refresh NFL Data';
+            refreshBtn.style.cssText = `
+                background: none;
+                border: none;
+                color: var(--text-color);
+                font-size: 1.2rem;
+                cursor: pointer;
+                margin-left: 10px;
+                opacity: 0.7;
+                transition: transform 0.3s;
+            `;
+            refreshBtn.onclick = () => {
+                refreshBtn.style.transform = 'rotate(360deg)';
+                fetchNFLData();
+                setTimeout(() => refreshBtn.style.transform = 'none', 500);
+            };
+            widgetHeader.appendChild(refreshBtn);
+        }
+    }
 
     try {
         const response = await fetch(apiUrl);
@@ -522,15 +552,24 @@ async function fetchNFLData() {
 
         nflContainer.innerHTML = '';
 
-        // 1. Find Next Seahawks Game
+        // 1. Find Seahawks Game (Next, Live, or Last)
         const seahawksGame = events.find(event =>
             event.competitions[0].competitors.some(team => team.team.abbreviation === 'SEA')
         );
 
         if (seahawksGame) {
-            renderNFLGame(nflContainer, seahawksGame, 'Next Seahawks Game');
+            const statusState = seahawksGame.status.type.state; // pre, in, post
+            let label = 'Next Seahawks Game';
+
+            if (statusState === 'post') {
+                label = 'Last Seahawks Game';
+            } else if (statusState === 'in') {
+                label = '🔴 Live Seahawks Game';
+            }
+
+            renderNFLGame(nflContainer, seahawksGame, label, statusState === 'post' || statusState === 'in');
         } else {
-            nflContainer.innerHTML += '<p>No upcoming Seahawks game found.</p>';
+            nflContainer.innerHTML += '<p>No Seahawks game data found.</p>';
         }
 
         // 2. Find Upcoming Non-Sunday Games (within 6.5 days)
@@ -542,16 +581,18 @@ async function fetchNFLData() {
             const dayOfWeek = gameDate.getDay(); // 0 = Sunday
 
             // Filter logic:
-            // 1. Game is in the future (or very recent past if today) - API handles "current week" mostly
+            // 1. Game is in the future (or very recent past if today)
             // 2. Game is NOT on Sunday (dayOfWeek !== 0)
             // 3. Game is within the lookahead limit
             // 4. Game is NOT the Seahawks game (already displayed)
+            // 5. Game is NOT finished (post) - we only want UPCOMING non-Sunday games
 
             return (
                 gameDate >= now &&
                 gameDate <= lookaheadLimit &&
                 dayOfWeek !== 0 &&
-                event.id !== seahawksGame?.id
+                event.id !== seahawksGame?.id &&
+                event.status.type.state !== 'post'
             );
         });
 
@@ -559,7 +600,6 @@ async function fetchNFLData() {
         upcomingNonSundayGames.sort((a, b) => new Date(a.date) - new Date(b.date));
 
         if (upcomingNonSundayGames.length > 0) {
-            // Add a divider or header if needed, but for now just list them
             upcomingNonSundayGames.forEach(game => {
                 const gameDate = new Date(game.date);
                 const dayName = gameDate.toLocaleDateString('en-US', { weekday: 'long' });
@@ -573,25 +613,40 @@ async function fetchNFLData() {
     }
 }
 
-function renderNFLGame(container, game, label) {
-    const matchup = game.name;
+function renderNFLGame(container, game, label, showScore = false) {
     const shortName = game.shortName;
     const date = new Date(game.date);
+    const competition = game.competitions[0];
 
-    const timeString = date.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit'
-    });
+    let timeOrScore = '';
+
+    if (showScore) {
+        // Find score
+        const homeTeam = competition.competitors.find(c => c.homeAway === 'home');
+        const awayTeam = competition.competitors.find(c => c.homeAway === 'away');
+        timeOrScore = `${awayTeam.team.abbreviation} ${awayTeam.score} - ${homeTeam.team.abbreviation} ${homeTeam.score}`;
+
+        if (game.status.type.state === 'in') {
+            timeOrScore += ` (${game.status.displayClock})`;
+        } else if (game.status.type.state === 'post') {
+            timeOrScore += ` (Final)`;
+        }
+    } else {
+        timeOrScore = date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+        });
+    }
 
     const gameDiv = document.createElement('div');
     gameDiv.className = 'nfl-game';
     gameDiv.innerHTML = `
         <div class="game-header">${label}</div>
         <div class="game-matchup">${shortName}</div>
-        <div class="game-time">${timeString}</div>
+        <div class="game-time" style="${showScore ? 'font-weight: bold; color: var(--accent-color);' : ''}">${timeOrScore}</div>
     `;
     container.appendChild(gameDiv);
 }
