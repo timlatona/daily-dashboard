@@ -509,10 +509,16 @@ function fetchHouseValue() {
 }
 
 // --- NFL Data Integration ---
-async function fetchNFLData() {
+async function fetchNFLData(weekNumber = null) {
     const nflContainer = document.getElementById('nfl-data');
-    // Add timestamp to prevent caching
-    const apiUrl = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?t=${new Date().getTime()}`;
+
+    // Base URL
+    let apiUrl = `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?t=${new Date().getTime()}`;
+
+    // Append week if provided
+    if (weekNumber) {
+        apiUrl += `&week=${weekNumber}`;
+    }
 
     // Add Refresh Button if not present
     let refreshBtn = document.getElementById('nfl-refresh-btn');
@@ -536,7 +542,7 @@ async function fetchNFLData() {
             `;
             refreshBtn.onclick = () => {
                 refreshBtn.style.transform = 'rotate(360deg)';
-                fetchNFLData();
+                fetchNFLData(); // Fetch default (current) week on refresh
                 setTimeout(() => refreshBtn.style.transform = 'none', 500);
             };
             widgetHeader.appendChild(refreshBtn);
@@ -549,13 +555,22 @@ async function fetchNFLData() {
 
         const data = await response.json();
         const events = data.events || [];
-
-        nflContainer.innerHTML = '';
+        const currentWeek = data.week?.number;
 
         // 1. Find Seahawks Game (Next, Live, or Last)
         const seahawksGame = events.find(event =>
             event.competitions[0].competitors.some(team => team.team.abbreviation === 'SEA')
         );
+
+        // LOGIC: If we are on the default fetch (no weekNumber) AND the Seahawks game is FINAL,
+        // then we should automatically fetch the NEXT week to show upcoming games.
+        if (!weekNumber && seahawksGame && seahawksGame.status.type.state === 'post') {
+            console.log("Seahawks game is over, fetching next week:", currentWeek + 1);
+            fetchNFLData(currentWeek + 1);
+            return; // Stop this execution, the next call will handle rendering
+        }
+
+        nflContainer.innerHTML = '';
 
         if (seahawksGame) {
             const statusState = seahawksGame.status.type.state; // pre, in, post
@@ -572,24 +587,20 @@ async function fetchNFLData() {
             nflContainer.innerHTML += '<p>No Seahawks game data found.</p>';
         }
 
-        // 2. Find Upcoming Non-Sunday Games (within 6.5 days)
-        const now = new Date();
-        const lookaheadLimit = new Date(now.getTime() + (6.5 * 24 * 60 * 60 * 1000)); // 6.5 days from now
+        // 2. Find Upcoming Non-Sunday Games
+        // If we fetched a specific week (next week), we show all non-Sunday games for that week.
+        // If we are on current week, we filter for future games.
 
         const upcomingNonSundayGames = events.filter(event => {
             const gameDate = new Date(event.date);
             const dayOfWeek = gameDate.getDay(); // 0 = Sunday
 
             // Filter logic:
-            // 1. Game is in the future (or very recent past if today)
-            // 2. Game is NOT on Sunday (dayOfWeek !== 0)
-            // 3. Game is within the lookahead limit
-            // 4. Game is NOT the Seahawks game (already displayed)
-            // 5. Game is NOT finished (post) - we only want UPCOMING non-Sunday games
+            // 1. Game is NOT on Sunday (dayOfWeek !== 0)
+            // 2. Game is NOT the Seahawks game (already displayed)
+            // 3. Game is NOT finished (post)
 
             return (
-                gameDate >= now &&
-                gameDate <= lookaheadLimit &&
                 dayOfWeek !== 0 &&
                 event.id !== seahawksGame?.id &&
                 event.status.type.state !== 'post'
@@ -605,6 +616,10 @@ async function fetchNFLData() {
                 const dayName = gameDate.toLocaleDateString('en-US', { weekday: 'long' });
                 renderNFLGame(nflContainer, game, `${dayName} Football`);
             });
+        } else {
+            if (!seahawksGame) {
+                nflContainer.innerHTML = '<p>No upcoming games found.</p>';
+            }
         }
 
     } catch (error) {
@@ -634,8 +649,6 @@ function renderNFLGame(container, game, label, showScore = false) {
     } else {
         timeOrScore = date.toLocaleDateString('en-US', {
             weekday: 'short',
-            month: 'short',
-            day: 'numeric',
             hour: 'numeric',
             minute: '2-digit'
         });
